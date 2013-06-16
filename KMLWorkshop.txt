@@ -1,0 +1,504 @@
+
+Dynamic Keyhole Markup Language (KML) for Google Earth
+Workshop
+
+02 November 2007
+spatial@ucsb
+
+
+
+
+      I. Introductions
+      II. Basics of Keyhole Markup Language
+      III. Passing variables and using online scripts
+
+      break
+
+      IV. Collaborative mapping
+
+      break
+
+      V. Great circles and rhumb lines
+      VI. Considerations for scientific use
+
+      break
+
+      VII. Dynamic KML exercise
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Alan Glennon
+alan@spatial.ucsb.edu
+
+Part I. Hello!
+
+
+Part II. Basics of Keyhole Markup Language
+
+KML is simple, powerful, text-readable, and can be readily visualized in Google Earth. You might think of the format with this analogy,
+
+HTML:web browser::KML:Google Earth.
+
+Here are two example KML files:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.0">
+<Placemark>
+<name>Plano House</name>
+<description>I grew up in this house.</description>
+<address>2501 Brennan Dr., Plano, Texas</address>
+</Placemark>
+</kml>
+
+-and-
+
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.1">
+<Document>
+<Placemark>
+<Point>
+<coordinates>-96.740805,33.024174,0</coordinates>
+</Point>
+</Placemark>
+</Document>
+</kml>
+
+
+Part III. Passing variables and using online scripts
+
+With a webhost it is possible to not just serve simple html webpages, but perform calculations too. One of the ways to do this is using a scripting language like php. I have placed the following code at: http://dra.in/~alan/adder.php:
+
+<?php
+$newvariable1 = $_GET['firstnumber'];
+$newvariable2 = $_GET['secondnumber'];
+echo $newvariable1 + $newvariable2;
+?>
+
+If you use the following command in your web browser, it will add the numbers 8 and 3, and display the number 11.
+http://dra.in/~alan/adder.php?firstnumber=8&secondnumber=3
+
+In php, the echo command can return combinations of variables and constants.  As such, it is possible to embed all the necessary components of a KML as an output of a php script.  The following php code is longer than the adder.php function above, but not particularly complex. The first part of the code receives the “sample” variable. The next several lines are header settings to output a KML.  The “for loop” iterates the creation of quasi-random points, and the remaining portions of KML, including the calculation results, are output.
+
+Here are the contents of numericmethod.php:
+
+<?php
+
+$iterations = $_GET['sample'];
+
+header('Content-type: application/vnd.google-earth.kml+xml');
+echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+echo "<kml xmlns=\"http://earth.google.com/kml/2.1\">\n";
+echo "<Document>\n";
+
+for ( $counter = 1; $counter <= $iterations; $counter += 1) {
+$lat_int = rand(-90, 90);
+$lat_dec = rand(0, 1000000000);
+$lon_int = rand(-180, 180);
+$lon_dec = rand(0, 1000000000);
+$lat = $lat_int.'.'.$lat_dec;
+$lon = $lon_int.'.'.$lon_dec;
+$response = '<Placemark>';
+$response .= '<description></description>';
+$response .= '<name></name>';
+$response .= '<visibility>1</visibility>';
+$response .= '<Point>';
+$response .= "<coordinates>$lon,$lat,0</coordinates>";
+$response .= '</Point>';
+$response .= '</Placemark>';
+echo $response;
+}
+
+echo "</Document>";
+echo "</kml>";
+?>
+
+The example URLs pass the variable “sample=5000”, and use two different methods for calculating random points:
+
+http://dra.in/~alan/numericmethod.php?sample=5000
+http://dra.in/~alan/randomsphere.php?sample=5000
+
+After trying each, you might notice that the numericmethod.php does not yield a random distribution. The points cluster near the poles due to the non-uniform nature of the graticule. The randomsphere.php function weights against the poles to yield a somewhat more random distribution.
+
+
+
+Part IV. Collaborative Mapping
+
+Part of the power of online mapping is the ability to rapidly visualize data drawn from near-real-time sources. In this exercise, we will create a collaborative map of the workshop participants. Fortunately, numerous mechanisms exist online to assemble group contributed data. The most-notable example is a wiki, the architecture behind the collaborative encyclopedia Wikipedia. For this map application, we'll use an online spreadsheet because it provides the framework for a much more structured dataset.
+
+The exercise will use the online, collaborative spreadsheet Editgrid.com. One particularly useful aspect of Editgrid is that each cell in the spreadsheet can be addressed with scripting. Thus, the cells can be addressed, rearranged, and transformed into a KML file. Even better, the Editgrid team has already created a ready-made script and user interface to do most of the work for us. Underneath the interface, there is a script quite similar to those used in Part I.
+
+To start, you will need to register for an EditGrid account to take advantage of its mapping functionality. A nice part about their online service is that they do not require an email address to sign-up. Google requires an account to do the same thing. Once you are registered at Editgrid, you can go directly to our collaborative spreadsheet at: 
+
+http://www.editgrid.com/user/glennon/kml02nov07
+
+In the spreadsheet, follow the data entry pattern I started. Add your name to the first column, where you were born, where you grew up, the farthest you've been from home, and where you live now. Use the format City, State or City, Country. Since we'll all be doing this at the same time, you’ll need to be careful not to overwrite other’s information.
+
+Next, go to “File” --> “Save As”. In the subsequent dialog, leave the spreadsheet name the same, but change the “Access Level” to “Public Read-only”. Click “Ok” and then “Open kml02nov07.” Now, we have added collaborative dataset, you have a copy for your own safekeeping, and we are ready to make some maps.
+
+Go to the “My Workspace” tab in the upper right hand corner of the screen. Double check on the far right indicator under “Public” that your spreadsheet is “Read-only” or “Read/Write”. “Read-only” is preferred.
+
+A new menu should appear with tabs that include, “Add-ons.” Select that one.
+
+At the new screen, select the icon “Grid2Map.”
+
+Explore the pulldown menus and make the appropriate choices, “kml02nov07”, “Hometowns”, point features, our spreadsheet has a header, Title Column: “Column A-(Name)”, “Description Column: “Column C-(Notes)”, Address Column: “Column B-(Location)”, and you can leave the latitude and longitude columns unselected (since the EditGrid script includes automatic geocoding against a digital gazetteer). Notice near the bottom of the page you have three choices: “View Map”, “View Earth”, and “Reset”.
+
+First, click on “View Earth” and open the file in Google Earth. Explore around and find the class's pushpins.
+
+Minimize Google Earth, and return to Editgrid. Click on “View Map”. The pushpins should appear on Google Maps. Editgrid allows rapid prototyping, but very little control over symbolization and other cartographic parameters. Customized implementations can be created, but require a little more effort. A starting place for further information is:
+http://code.google.com/support/bin/answer.py?answer=69906&topic=11364&ctx=sibling
+
+
+Supplement to the Collaborative Mapping Exercise
+This example code can be modified to emulate Editgrid’s Grid2Map Feature:
+
+<?php
+header('Content-type: application/vnd.google-earth.kml+xml');
+echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+echo "<kml xmlns=\"http://earth.google.com/kml/2.1\">\n";
+echo "<Document>\n";
+
+
+//This script takes input from an online editgrid spreadsheet and creates KML.
+
+$string2 = 1;
+$placename3 = "http://www.editgrid.com/user/glennon/testspread/Sheet1!A$string2";
+
+$anythinginthere = file($placename3);
+
+while ($anythinginthere[0]) {
+$string2 = $string2 + 1;
+$placename3 = "http://www.editgrid.com/user/glennon/testspread/Sheet1!A$string2";
+$location4 = "http://www.editgrid.com/user/glennon/testspread/Sheet1!B$string2";
+$description5 = "http://www.editgrid.com/user/glennon/testspread/Sheet1!C$string2";
+$latlong6 = "http://www.editgrid.com/user/glennon/testspread/Sheet1!D$string2";
+$anythinginthere = file($placename3);
+
+// use this if statement to account for the last line which yields a true
+// even after its empty. the next line yields a false, so it won' execute these
+// next parts.
+
+if ($anythinginthere[0]) {
+$addressarray = file($location4);
+$descriparray = file($description5);
+$latlongarray = file($latlong6);
+// echo "$anythinginthere[0] $addressarray[0] $descriparray[0] $latlongarray[0]";
+
+// write a static KML file
+
+echo "<Placemark>\n";
+echo "<name>$anythinginthere[0]</name>\n";
+echo "<description>$descriparray[0]</description>\n";
+echo "<Point>\n";
+echo "<coordinates>$latlongarray[0]</coordinates>\n";
+echo "</Point>\n";
+echo "</Placemark>\n";
+
+}
+}
+
+// Total number of data entries (Placemarks) is $string2 - 2
+// This substracts the header and the last cell before the null.
+$datapointcount = ($string2 - 2);
+
+// A few KML administrative tags
+echo "</Document>";
+echo "</kml>";
+
+
+?>
+
+Part V. Great circles and rhumb lines
+
+Overview: In this section, we will use Google Maps and Earth to examine some of the distortions that occur during the map projection process.
+
+Materials: Google Earth, Google Maps (maps.google.com), SSH, php, a text editor, and an Internet connection.
+
+Step 1.
+Save the file lab2line.kml to your hard drive. The file can be found at: 
+http://dra.in/~alan/lab2line.kml
+
+Step 2.
+Open the file and examine its structure. This file contains style information to set the line's color to red. Otherwise, the actual geometry is held within the <LineString> and <coordinates> tags. Replace the current coordinates with the latitude and longitude for Santiago, Chile, and Moscow, Russia.
+
+Step 3.
+Log into your department web account using SSH. Files placed in the "public_html" directory will be visible at: http://dra.in/~yourname/
+
+Step 4.
+Create a folder in your account called "lab2". 
+
+Step 5.
+Place the file "lab2line.kml" in your "lab2" folder.
+
+Step 6. 
+Open Google Earth, go to "File", "Open". For the file name, type: http://dra.in/~youraccount/lab2/lab2line.kml
+
+Step 7.
+Minimize the Google Earth window, but leave the program running. Compare the path of the line in Google Earth and Google Maps. To do so, start Google Maps. 
+
+Step 8.
+Google Maps will render KML files if they are hosted online. Paste the web address from Step 6 into the search box of Google Maps, and press "Search Maps".
+
+Step 9. Examine the routes taken by the line in Google Earth and Google Maps. Do the lines have the same route geometry? 
+
+
+How long is the route?
+I have written a bit of code that provides great circle distances (in kilometers) between pairs of latitudes and longitudes. The code can be called using a command like this:
+
+http://dra.in/~alan/greatcircle.php?lat1=10&lon1=10&lat2=10&lon2=11
+
+
+Contents of greatcircle.php:
+
+<?php
+
+$loc1_lat = $_GET['lat1'];
+$loc1_lon = $_GET['lon1'];
+$loc2_lat = $_GET['lat2'];
+$loc2_lon = $_GET['lon2'];
+$precision = 6;
+
+$lat1 = $loc1_lat * pi()/180;
+$lat2 = $loc2_lat * pi()/180;
+$lon1 = $loc1_lon * pi()/180;
+$lon2 = $loc2_lon * pi()/180;
+$theta = $lon1 - $lon2;
+$rawdistance = sin($lat1) * sin($lat2) + cos($lat1) * cos($lat2) * cos($theta);
+$distance = round(6367.2 * acos($rawdistance), $precision);
+echo $distance;
+
+?>
+
+
+
+Examining Web Mapping Projections
+
+Using the ability of Google Maps to visualize KML, modify the following piece of KML to find the approximate bounding northern and southern parallels of Google Map's projection. Also, plot the North and South Pole. I recommend that you create placemarks at 5 degree increments near the North and South Pole, and remove the ones that you don't need later.
+
+<?xml version="1.0" encoding="UTF-8"?> 
+<kml xmlns="http://earth.google.com/kml/2.1">
+<Document>
+
+<Placemark>
+<name>75 N latitude</name>
+<description>A description could go here.</description>
+<Point>
+<coordinates>0,75,0</coordinates>
+</Point>
+</Placemark>
+
+<Placemark>
+<name>Labeling the latitude would be a good idea.</name>
+<description>This is not the South Pole.</description>
+<Point>
+<coordinates>0,-80,0</coordinates>
+</Point>
+</Placemark>
+
+</Document>
+</kml>
+
+
+Part VI. Considerations for scientific use
+	Discussion led by Josh Bader
+
+
+
+Part VII. Dynamic KML
+
+Overview: In this exercise, we will use Google Earth to create a spatial database-driven tracking map in Google Earth.
+
+Materials: Google Earth, SSH, php, a text editor, and an Internet connection.
+
+Step 1.
+Go to http://dra.in/~alan/kml/ and save the following files to your hard drive:
+
+      datadriven.txt
+      htaccess.txt
+      tracker.kml
+      datapoint.txt
+      alan.kml
+
+
+
+Step 2. Open SSH and create a folder called "lab3" in your "public_html" folder.
+
+Step 3. If you open "htaccess.txt" with a text editor, you will see that it is two lines of text:
+
+	AddType application/vnd.google-earth.kml+xml kml
+	AddType application/vnd.google-earth.kmz kmz
+
+Placed online within a special file named .htaccess, these two lines tell the webhost to associate KML and KMZ files with Google Earth. Move the file "htaccess.txt" to your "lab3" folder.
+
+Step 4. In your folder "lab3", rename "htaccess.txt" to ".htaccess". When you do this in SSH, the file may vanish. You can check to see if it still exists by checking View --> Show Hidden Files. Delete "htaccess.txt" on your Desktop.
+
+Step 5. Next, use a text editor like WordPad to examine the contents of "alan.kml". Note that the file is a standard KML file describing a single point placemark. The description tag is a little different than the previous labs. 
+
+<description><![CDATA[Lat/Lon: 44.02, -140.86<br>Distance: 72.118329]]></description> 
+
+The <![CDATA[     ]]> tag allows this KML to use HTML in its description. When rendered in Google Earth or Maps, the dialog box description of the placemark can use HTML formating.
+
+Step 6. Within the KML, change the name between the <name> and </name> tags to your own. Save, and close your text editor.
+
+Step 7. Copy "alan.kml" to your "lab3" folder. Delete "alan.kml" from your Desktop.
+
+Step 8. In SSH, right click on "alan.kml" and choose Rename. Change the name of the file to your own name (leave the .kml extension). The file should now be named something like "karen.kml" or "qxt12.kml". For the rest of the lab, it will be referred to as "karen.kml".
+
+Step 9. In SSH, right click on "karen.kml" and select Properties. Under permission mode, type: "666". This will allow our php script to write to the file. Click Okay.
+
+Step 10.  Next, on your desktop, examine "datapoint.txt" in a text editor. The file is a short text file with a single line. The single line contains a latitude coordinate, a comma, a longitude coordinate, a comma, and an elevation value. "Datapoint.txt" is a spatial database holding the information about our marker's location. To know the location, we read the file. If we want to see ourselves plotted on Google Earth, we parse the coordinates into a KML. If we change our position, we perform some calculations, and write new coordinates to the "datapoint.txt" file. Close the text editor.
+
+Step 11. Copy "datapoint.txt" to your "lab3" folder. In SSH, right click on "datapoint.txt" and select Properties. Under permission mode, type: "666". This will allow our php script to read the file and write to it. Click Okay.
+
+Step 12. Delete "datapoint.txt" from your Desktop.
+
+Step 13. Open"datadriven.txt" using Wordpad or another text editor. "Datadriven" is the primary code for the tracking map, and you'll eventually move it to your webhost so it can be executed. Steps 13-21 describe how to customize the code, but you will not be able to test your results until all the modifications are complete. Carefully follow each step, and ask if there are components you do not understand. 
+
+Starting at the beginning of the file, note that the php receives two variables: direct and out. The direct variable is designed to receive information about the direction we want our marker to move. The out variable tells the code what type of output to create. In this case, our choice is KML or text. The code will mostly use the KML output, but I added the possibility of text output for debugging purposes.
+
+The next thing the php code does is read the contents of "datapoint.txt". It examines the contents and separates each item. The explode command does the separation. It splits the file into chunks based on a 
+delimiter. Our delimiter is a comma. The result is that the first chunk of data will now be called and addressed $pieces[0], the second part $pieces[1], and third part $pieces[2]. For instance, if "datapoint.txt" was composed of: "-120,32,3000", $pieces[1] would now equal 32 (likewise:, given the statement:  $newlat = $pieces[1]", $newlat would equal 32. Note that the code reassigns the $pieces[ ] variables to the more understandable names $newlat and $newlong.
+
+Step 14. If the code received a variable "north", "south", "east", or "west", the next section will change the latitude ($newlat) and longitude ($newlong) accordingly. Right now, the code only handles "south", so you will need to add the code for "north", "east", and "west". Here's the existing code:
+
+// if $whichdirection equals south, then do some calculations to change the coordinates
+if ($whichdirection == "south") {
+$newlong = $newlong + 0.00;
+$newlat = $newlat - 0.1;
+}
+
+The first line is called a comment line, and is ignored by php. Anything placed on a line after a // is ignored. The second line is an if statement. The code checks to see whether $whichdirection equals "north". If it does, it will execute the code between the { } brackets. If $whichdirection does not equal south, the code between the brackets is skipped and not executed. Notice that the code between the brackets subtracts from the latitude since the direction was south. Conversely, you would want to add to go north. If you want to move the marker's position further, you could add a larger or smaller number (in decimal degrees). Following the pattern in the code segment above, in the text editor, write additional code to move the latitude and longitude position north, east and west. The final code placement should follow a similar pattern to this, but with cardinal rather than intercardinal directions:
+
+// if $whichdirection equals northeast, then do some calculations to change the coordinates
+if ($whichdirection == "northeast") {
+$newlong = $newlong + 0.1;
+$newlat = $newlat + 0.1;
+}
+
+// if $whichdirection equals northwest, then do some calculations to change the coordinates
+if ($whichdirection == "northwest") {
+$newlong = $newlong - 0.1;
+$newlat = $newlat + 0.1;
+}
+
+// if $whichdirection equals southeast, then do some calculations to change the coordinates
+if ($whichdirection == "southeast") {
+$newlong = $newlong + 0.1;
+$newlat = $newlat - 0.1;
+}
+
+// if $whichdirection equals southwest, then do some calculations to change the coordinates
+if ($whichdirection == "southwest") {
+$newlong = $newlong - 0.1;
+$newlat = $newlat - 0.1;
+}
+
+Step 15. After inserting the new code, "datadriven.php"'s next lines write the calculations back to the spatial database "datapoint.txt". The code recombines the longitude, latitude, and elevation as a variable called $outputthis. Examine the code and move to Step 16:
+
+// opens the file datapoint.txt and this time readies it for writing
+$fileforwriting = fopen($ourFileName, 'w') or die("can't open file");
+
+// creates a string composed of latitude,longitude,elevation. Dots mean append. The commas are held in within the quotation marks.
+$outputthis = $newlong.",".$newlat.",".$pieces[2];
+
+// write the $outputthis string to the file then close it up.
+fwrite($fileforwriting, $outputthis);
+fclose($fileforwriting);
+
+Step 16. If we know the web address of others' "datapoint.txt" files, we can calculate the distance between us and them. The next dozen lines of code takes the contents of another's "datapoint.txt" file and splits it into subunits, using the same commands described in the second paragraph of Step 13. The thing to do here is change the following line to an address of one of your classmates.
+
+$placename3 = "http://dra.in/~alan/lab3/datapoint.txt";
+
+A few lines further, the code calls the Great Circle distance function used earlier in the workshop. This time, however, the previous static latitudes and longitudes are replaced by variables. Examine the line and move to Step 17:
+
+http://dra.in/~alan/greatcircle.php?lat1=$newlat&lon1=$newlong&lat2=$trackcoordinates[1]&lon2=$trackcoordinates[0]
+
+Step 17. The last important part of the php code to modify is the KML output. In the following code section, replace "alan.kml" with your own file name. In this example, we would rename it "karen.kml". Also change the text between the <name> and </name> tags to your own. Make those changes in the following code:
+
+
+// if $typeoutput equals kml then write a KML file called alan.kml
+if ($typeofoutput == "kml") {
+$kmlOutputFile = "alan.kml";
+$newKML = fopen($kmlOutputFile, 'w') or die("can't open file");
+$temporarystring .= "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+$temporarystring .= "<kml xmlns=\"http://earth.google.com/kml/2.1\">\n";
+$temporarystring .= "<Document>\n";
+$temporarystring .= "<Placemark>\n";
+// Change the following descriptive name to your own
+$temporarystring .= "<name>YourName</name>\n";
+$temporarystring .= "<description><![CDATA[Lat/Lon: $newlat, $newlong<br>Distance: $TempDistance]]></description>\n";
+$temporarystring .= "<Point>\n";
+$temporarystring .= "<coordinates>$outputthis</coordinates>\n";
+$temporarystring .= "</Point>\n";
+$temporarystring .= "</Placemark>\n";
+$temporarystring .= "</Document>";
+$temporarystring .= "</kml>";
+fwrite($newKML, $temporarystring);
+fclose($newKML);
+}
+
+Beyond these lines, you should see a ?> denoting the end of the php code. That's not the end of the file; there is a line of HTML too.
+
+
+Step 18. The HTML, following the php, comprise the user interface for our program:
+<a href="http://dra.in/~yourname/lab3/datadriven.php?direct=south&out=kml">South</a><br>
+
+The above lines create a clickable link, and following what you know about passing variables to a php, you can see that the link is self-referential. In the existing HTML, the link passes the variables direct=south and out=kml. You will need to add additional links for North, East, and West. The pattern for the first two would look like this (don't forget to change yourname to your actual account name):
+
+<a href="http://dra.in/~yourname/lab3/datadriven.php?direct=north&out=kml">North</a><br>
+<a href="http://dra.in/~yourname/lab3/datadriven.php?direct=south&out=kml">South</a><br>
+
+Write the appropriate HTML to make links to pass variables to the php for North, South, East, and West.
+
+Step 19. The code is done. Save.
+
+Step 20. Now, move your "datadriven.txt" to your "lab3" folder.
+
+Step 21. Right click on "datadriven.txt" and rename it to "datadriven.php".
+
+Step 22. If we load "karen.kml" into Google Earth, and start making requests to "datadriven.php", the files will work, but the marker rendered from "karen.kml" will stay stationary. If you manually reload it, the marker will change position, but that would not provide satisfactory real-time tracking. Fortunately, KML has a feature called the NetworkLink that will check for updates to another KML at assigned intervals. The file "tracker.kml" does just that. Open "tracker.kml" using Wordpad. The file has a fairly simple structure, including:
+
+   <NetworkLink>
+      <Url>
+        <href>http://dra.in/~alan/lab3/alan.kml</href>
+       <refreshMode>onInterval</refreshMode>
+       <refreshInterval>3</refreshInterval>
+      </Url>
+    </NetworkLink>
+
+In this case, <NetworkLink> sends a request to: http://dra.in/~alan/lab3/alan.kml, and expects a valid KML in return. The request occurs at a refresh interval of every three seconds. The NetworkLink will display the latest version of the returned KML.
+
+Step 23. Following the pattern in "tracker.kml", edit and add additional NetworkLinks so you can track the positions of at least ten of your classmates.
+
+Step 24. Save your changes to "tracker.kml". Place the file in your "lab3" folder. Delete "tracker.kml" from your Desktop.
+
+Step 25. Open Google Earth and load "tracker.kml" from its location online. Expand the menus under "tracker.kml" so you can see your marker's latitude, longitude, and distance (to your tracking target). See Lab 2 if you need instructions on opening a hosted KML.
+
+Step 26. Point your web browser to: dra.in/~youraccount/lab3/datadriven.php
+
+Step 27. Arrange your web browser and Google Earth so both can be seen at the same time. Google Earth has its own web browser too. You can open it in Google Earth under Tools --> Web. If everything went right, you now have a real-time, database-driven tracking map.
+
+Step 28. Move your marker around using your datadriven webpage links, and check to see whether it yields an accurate latitude, longitude, and tracking distance.
+
+Question. Think of two real world examples where tracking points in real time may be useful. What additional functionality, cartographic customization, or concerns would need to be added to your code to make your examples possible. Example answer: This type of point tracking could be used to monitor the location, and predicted positions, of a tornado. A critical component of that tracking would be to obtain a live feed of the tornado's position and store its previous locations so a predictive trend could be calculated. Also, since tornadoes have different magnitudes and state characteristics (like "on the ground", "visible on Doppler", etc.), storing such data and symbolizing it cartographically would make the map more useful. 
+
+Step 29. When you are finished with the this part of the lab, within SSH, change the Properties of "datapoint.txt" and "karen.kml" to "0644".  
+
+Step 30. Just to keep things tidy, delete "datadriven.txt" from your Desktop.
+
+
