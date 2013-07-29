@@ -1,4 +1,3 @@
-
 Dynamic Keyhole Markup Language (KML) for Google Earth
 Workshop
 
@@ -43,7 +42,7 @@ spatial@ucsb
 
 
 Alan Glennon
-alan@spatial.ucsb.edu
+glennon@gmail.com
 
 Part I. Hello!
 
@@ -60,8 +59,8 @@ Here are two example KML files:
 <kml xmlns="http://earth.google.com/kml/2.0">
 <Placemark>
 <name>Plano House</name>
-<description>I grew up in this house.</description>
-<address>2501 Brennan Dr., Plano, Texas</address>
+<description>I grew up near this house.</description>
+<address>2501 Evans Dr., Plano, Texas</address>
 </Placemark>
 </kml>
 
@@ -92,7 +91,7 @@ echo $newvariable1 + $newvariable2;
 If you use the following command in your web browser, it will add the numbers 8 and 3, and display the number 11.
 http://dra.in/~alan/adder.php?firstnumber=8&secondnumber=3
 
-In php, the echo command can return combinations of variables and constants.  As such, it is possible to embed all the necessary components of a KML as an output of a php script.  The following php code is longer than the adder.php function above, but not particularly complex. The first part of the code receives the “sample” variable. The next several lines are header settings to output a KML.  The “for loop” iterates the creation of quasi-random points, and the remaining portions of KML, including the calculation results, are output.
+In php, the echo command can return combinations of variables and constants.  As such, it is possible to embed all the necessary components of a KML as an output of a php script.  The following php code is longer than the adder.php function above, but not particularly complex. The first part of the code receives the ï¿½sampleï¿½ variable. The next several lines are header settings to output a KML.  The ï¿½for loopï¿½ iterates the creation of quasi-random points, and the remaining portions of KML, including the calculation results, are output.
 
 Here are the contents of numericmethod.php:
 
@@ -127,7 +126,7 @@ echo "</Document>";
 echo "</kml>";
 ?>
 
-The example URLs pass the variable “sample=5000”, and use two different methods for calculating random points:
+The example URLs pass the variable ï¿½sample=5000ï¿½, and use two different methods for calculating random points:
 
 http://dra.in/~alan/numericmethod.php?sample=5000
 http://dra.in/~alan/randomsphere.php?sample=5000
@@ -146,26 +145,26 @@ To start, you will need to register for an EditGrid account to take advantage of
 
 http://www.editgrid.com/user/glennon/kml02nov07
 
-In the spreadsheet, follow the data entry pattern I started. Add your name to the first column, where you were born, where you grew up, the farthest you've been from home, and where you live now. Use the format City, State or City, Country. Since we'll all be doing this at the same time, you’ll need to be careful not to overwrite other’s information.
+In the spreadsheet, follow the data entry pattern I started. Add your name to the first column, where you were born, where you grew up, the farthest you've been from home, and where you live now. Use the format City, State or City, Country. Since we'll all be doing this at the same time, youï¿½ll need to be careful not to overwrite otherï¿½s information.
 
-Next, go to “File” --> “Save As”. In the subsequent dialog, leave the spreadsheet name the same, but change the “Access Level” to “Public Read-only”. Click “Ok” and then “Open kml02nov07.” Now, we have added collaborative dataset, you have a copy for your own safekeeping, and we are ready to make some maps.
+Next, go to ï¿½Fileï¿½ --> ï¿½Save Asï¿½. In the subsequent dialog, leave the spreadsheet name the same, but change the ï¿½Access Levelï¿½ to ï¿½Public Read-onlyï¿½. Click ï¿½Okï¿½ and then ï¿½Open kml02nov07.ï¿½ Now, we have added collaborative dataset, you have a copy for your own safekeeping, and we are ready to make some maps.
 
-Go to the “My Workspace” tab in the upper right hand corner of the screen. Double check on the far right indicator under “Public” that your spreadsheet is “Read-only” or “Read/Write”. “Read-only” is preferred.
+Go to the ï¿½My Workspaceï¿½ tab in the upper right hand corner of the screen. Double check on the far right indicator under ï¿½Publicï¿½ that your spreadsheet is ï¿½Read-onlyï¿½ or ï¿½Read/Writeï¿½. ï¿½Read-onlyï¿½ is preferred.
 
-A new menu should appear with tabs that include, “Add-ons.” Select that one.
+A new menu should appear with tabs that include, ï¿½Add-ons.ï¿½ Select that one.
 
-At the new screen, select the icon “Grid2Map.”
+At the new screen, select the icon ï¿½Grid2Map.ï¿½
 
-Explore the pulldown menus and make the appropriate choices, “kml02nov07”, “Hometowns”, point features, our spreadsheet has a header, Title Column: “Column A-(Name)”, “Description Column: “Column C-(Notes)”, Address Column: “Column B-(Location)”, and you can leave the latitude and longitude columns unselected (since the EditGrid script includes automatic geocoding against a digital gazetteer). Notice near the bottom of the page you have three choices: “View Map”, “View Earth”, and “Reset”.
+Explore the pulldown menus and make the appropriate choices, ï¿½kml02nov07ï¿½, ï¿½Hometownsï¿½, point features, our spreadsheet has a header, Title Column: ï¿½Column A-(Name)ï¿½, ï¿½Description Column: ï¿½Column C-(Notes)ï¿½, Address Column: ï¿½Column B-(Location)ï¿½, and you can leave the latitude and longitude columns unselected (since the EditGrid script includes automatic geocoding against a digital gazetteer). Notice near the bottom of the page you have three choices: ï¿½View Mapï¿½, ï¿½View Earthï¿½, and ï¿½Resetï¿½.
 
-First, click on “View Earth” and open the file in Google Earth. Explore around and find the class's pushpins.
+First, click on ï¿½View Earthï¿½ and open the file in Google Earth. Explore around and find the class's pushpins.
 
-Minimize Google Earth, and return to Editgrid. Click on “View Map”. The pushpins should appear on Google Maps. Editgrid allows rapid prototyping, but very little control over symbolization and other cartographic parameters. Customized implementations can be created, but require a little more effort. A starting place for further information is:
+Minimize Google Earth, and return to Editgrid. Click on ï¿½View Mapï¿½. The pushpins should appear on Google Maps. Editgrid allows rapid prototyping, but very little control over symbolization and other cartographic parameters. Customized implementations can be created, but require a little more effort. A starting place for further information is:
 http://code.google.com/support/bin/answer.py?answer=69906&topic=11364&ctx=sibling
 
 
 Supplement to the Collaborative Mapping Exercise
-This example code can be modified to emulate Editgrid’s Grid2Map Feature:
+This example code can be modified to emulate Editgridï¿½s Grid2Map Feature:
 
 <?php
 header('Content-type: application/vnd.google-earth.kml+xml');
