@@ -147,24 +147,24 @@ http://www.editgrid.com/user/glennon/kml02nov07
 
 In the spreadsheet, follow the data entry pattern I started. Add your name to the first column, where you were born, where you grew up, the farthest you've been from home, and where you live now. Use the format City, State or City, Country. Since we'll all be doing this at the same time, you�ll need to be careful not to overwrite other�s information.
 
-Next, go to �File� --> �Save As�. In the subsequent dialog, leave the spreadsheet name the same, but change the �Access Level� to �Public Read-only�. Click �Ok� and then �Open kml02nov07.� Now, we have added collaborative dataset, you have a copy for your own safekeeping, and we are ready to make some maps.
+Next, go to "File" --> "Save As". In the subsequent dialog, leave the spreadsheet name the same, but change the �Access Level� to �Public Read-only�. Click �Ok� and then �Open kml02nov07.� Now, we have added collaborative dataset, you have a copy for your own safekeeping, and we are ready to make some maps.
 
-Go to the �My Workspace� tab in the upper right hand corner of the screen. Double check on the far right indicator under �Public� that your spreadsheet is �Read-only� or �Read/Write�. �Read-only� is preferred.
+Go to the "My Workspace" tab in the upper right hand corner of the screen. Double check on the far right indicator under �Public� that your spreadsheet is �Read-only� or �Read/Write�. �Read-only� is preferred.
 
-A new menu should appear with tabs that include, �Add-ons.� Select that one.
+A new menu should appear with tabs that include, "Add-ons." Select that one.
 
-At the new screen, select the icon �Grid2Map.�
+At the new screen, select the icon "Grid2Map."
 
-Explore the pulldown menus and make the appropriate choices, �kml02nov07�, �Hometowns�, point features, our spreadsheet has a header, Title Column: �Column A-(Name)�, �Description Column: �Column C-(Notes)�, Address Column: �Column B-(Location)�, and you can leave the latitude and longitude columns unselected (since the EditGrid script includes automatic geocoding against a digital gazetteer). Notice near the bottom of the page you have three choices: �View Map�, �View Earth�, and �Reset�.
+Explore the pulldown menus and make the appropriate choices, "kml02nov07", "Hometowns", point features, our spreadsheet has a header, Title Column: �Column A-(Name)�, �Description Column: �Column C-(Notes)�, Address Column: �Column B-(Location)�, and you can leave the latitude and longitude columns unselected (since the EditGrid script includes automatic geocoding against a digital gazetteer). Notice near the bottom of the page you have three choices: �View Map�, �View Earth�, and �Reset�.
 
-First, click on �View Earth� and open the file in Google Earth. Explore around and find the class's pushpins.
+First, click on "View Earth" and open the file in Google Earth. Explore around and find the class's pushpins.
 
-Minimize Google Earth, and return to Editgrid. Click on �View Map�. The pushpins should appear on Google Maps. Editgrid allows rapid prototyping, but very little control over symbolization and other cartographic parameters. Customized implementations can be created, but require a little more effort. A starting place for further information is:
+Minimize Google Earth, and return to Editgrid. Click on "View Map". The pushpins should appear on Google Maps. Editgrid allows rapid prototyping, but very little control over symbolization and other cartographic parameters. Customized implementations can be created, but require a little more effort. A starting place for further information is:
 http://code.google.com/support/bin/answer.py?answer=69906&topic=11364&ctx=sibling
 
 
 Supplement to the Collaborative Mapping Exercise
-This example code can be modified to emulate Editgrid�s Grid2Map Feature:
+This example code can be modified to emulate Editgrid's Grid2Map Feature:
 
 <?php
 header('Content-type: application/vnd.google-earth.kml+xml');
